@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: gke-puppeteer-webgl
+spec:
+  # This example has only been tested with a T4 GPU but it may work with others.
+  nodeSelector:
+    cloud.google.com/gke-accelerator: nvidia-tesla-t4
+  tolerations:
+  - key: "nvidia.com/gpu"
+    operator: "Equal"
+    value: "present"
+    effect: "NoSchedule"
+  containers:
+  - name: gke-puppeteer-webgl
+    image: ghcr.io/geomagical/gke-puppeteer-webgl:example-app
+    volumeMounts:
+    - name: nvidia-debug-tools
+      mountPath: /usr/local/nvidia/bin
+    - name: nvidia-libraries
+      mountPath: /usr/local/nvidia/lib64
+    resources:
+      requests:
+        memory: 4G
+        cpu: 1000m
+      limits:
+        memory: 4G
+        nvidia.com/gpu: "1"
+    ports:
+    - containerPort: 3000
+  volumes:
+  - name: nvidia-debug-tools
+    hostPath:
+      path: /home/kubernetes/bin/nvidia/bin
+  - name: nvidia-libraries
+    hostPath:
+      path: /home/kubernetes/bin/nvidia/lib64
