@@ -1,7 +1,7 @@
 FROM ubuntu:20.04
 LABEL org.opencontainers.image.source https://github.com/geomagical/gke-puppeteer-webgl
 
-ADD https://deb.nodesource.com/setup_16.x /nodesource_setup.sh
+ADD https://deb.nodesource.com/setup_18.x /nodesource_setup.sh
 RUN \
   bash /nodesource_setup.sh && \
   apt-get update && \
